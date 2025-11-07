@@ -14,8 +14,8 @@ export const getAllSkills = async (req, res) => {
         if(category) {
             query.category = category;
         }
-
-        const skills = await Skill.find(query).populate("userId", "firstName lastName email");
+        //Search by keyword and category if entered
+        const skills = await Skill.find(query).populate("userId", "firstName lastName email"); //Replaces ObjectId with actual document
         res.status(200).json(skills);
     }
     catch(err) {
