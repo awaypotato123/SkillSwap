@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.route.js";
 import cors from "cors";
+import mongoose from "mongoose";
 
 
 dotenv.config();
@@ -10,6 +11,8 @@ connectDB();
 
 const app = express();
 app.use(express.json()); 
+
+app.use(mongoose());
 
 app.use(cors());
 
