@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getSkillById, getAllSkills, createSkill } from "../controllers/skill.controller";
+import { getSkillById, getAllSkills, createSkill } from "../controllers/skill.controller.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", getAllSkills);
 router.get("/:id", getSkillById);
