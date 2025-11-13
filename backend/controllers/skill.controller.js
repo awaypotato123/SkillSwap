@@ -3,19 +3,19 @@ import User from "../models/User.js";
 
 export const getAllSkills = async (req, res) => {
     try {
-        const {keyword, category} = req.query; //for search (optional)
+        const {keyword, category} = req.query; 
 
         let query = {};
 
         if(keyword) {
-            query.title = { $regex: keyword, $options: "i"}; //case sensitive
+            query.title = { $regex: keyword, $options: "i"}; 
         }
 
         if(category) {
             query.category = category;
         }
-        //Search by keyword and category if entered
-        const skills = await Skill.find(query).populate("userId", "firstName lastName email"); //Replaces ObjectId with actual document
+       
+        const skills = await Skill.find(query).populate("userId", "firstName lastName email"); 
         res.status(200).json(skills);
     }
     catch(err) {
@@ -38,7 +38,7 @@ export const getSkillById = async (req, res) => {
 
 export const createSkill = async (req, res) => {
     try {
-        const { title, descritpion, category, level} = req.body;
+        const { title, description, category, level } = req.body;  
         const userId = req.user?.id;
 
         if (!userId)
@@ -50,7 +50,7 @@ export const createSkill = async (req, res) => {
             category,
             level,
             userId
-        })
+        });
 
         const savedSkill = await skill.save();
 
@@ -59,10 +59,10 @@ export const createSkill = async (req, res) => {
         res.status(201).json({
             message: "Skill created successfully",
             skill: savedSkill,
-        })
+        });
     }
     catch (err) {
         console.error("Error creating skill: ", err);
         res.status(500).json({ message: "Server error creating skill" });
     }
-}
+};

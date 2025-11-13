@@ -11,7 +11,11 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    alert(`Searching for: ${search}`);
+    if (search.trim()) {
+      navigate(`/browse?q=${encodeURIComponent(search)}`);
+    } else {
+      navigate("/browse");
+    }
   };
 
   const openSignUpModal = () => {
@@ -20,7 +24,7 @@ export default function Home() {
   };
 
   const openExploreClasses = () => {
-    navigate("/classes");
+    navigate("/browse");
   };
 
   return (
@@ -105,7 +109,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Success Pop-up Message for Sign In */}
+      
       {isSignInSuccessPopup && (
         <div className="fixed top-5 right-5 z-50 bg-blue-100 border border-blue-400 rounded-lg text-blue-700 p-4 shadow-md transition-transform transform duration-300 ease-in-out">
           <div className="flex items-center">
