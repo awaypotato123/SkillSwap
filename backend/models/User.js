@@ -27,6 +27,16 @@ const UserSchema = new mongoose.Schema({
   salt: {
     type: String,
   },
+  bio: {
+    type: String,
+    maxlength: 500,
+    default: ""
+  },
+  profilePicture: {
+    type: String,
+    default: "",
+    maxlength: 5000000 
+  },
   role: {
     type: String,
     enum: ["learner", "teacher", "admin"],
@@ -79,4 +89,5 @@ UserSchema.methods = {
     return Math.round(new Date().valueOf() * Math.random()) + "";
   }
 };
+
 export default mongoose.model("User", UserSchema);
