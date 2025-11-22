@@ -6,8 +6,17 @@ import skillRoutes from "./routes/skill.route.js";
 import searchRoutes from "./routes/search.route.js";
 import cors from "cors";
 
-
+// CRITICAL: Load environment variables FIRST, before anything else
 dotenv.config();
+
+// Verify environment variables are loaded
+console.log("=== Environment Variables Check ===");
+console.log("JWT_SECRET:", process.env.JWT_SECRET ? "✓ Loaded" : "✗ MISSING");
+console.log("MONGO_URL:", process.env.MONGO_URL ? "✓ Loaded" : "✗ MISSING");
+console.log("PORT:", process.env.PORT || "3000 (default)");
+console.log("===================================");
+
+// Connect to database
 connectDB();
 
 const app = express();
@@ -24,7 +33,7 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -3,6 +3,7 @@ import { getAllSkills, createSkill, updateSkill, deleteSkill } from "../controll
 
 const router = Router();
 
+
 router.get("/", getAllSkills);
 router.post("/", createSkill);
 router.put("/:id", updateSkill);

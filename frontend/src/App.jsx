@@ -1,22 +1,24 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import Navbar from './components/NavBar';
 import Home from './pages/Home';
 import Classes from './pages/Classes';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import ClassDetail from './pages/ClassDetail';
+import Browse from './pages/Browse';
+import SkillDetail from './pages/SkillDetail';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
-  // Redirect to home if no user is logged in
+  
   return user ? children : <Navigate to="/" replace />;
 }
 
 function AdminRoute({ children }) {
   const { user } = useAuth();
-  // Check if user is logged in and has admin role
+  
   return user && user.role === 'admin' ? children : <Navigate to="/" replace />;
 }
 
@@ -28,6 +30,8 @@ export default function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/browse" element={<Browse />} />
+            <Route path="/skills/:id" element={<SkillDetail />} />
             <Route path="/classes" element={<Classes />} />
             <Route path="/classes/:id" element={<ClassDetail />} />
             {/* Protected route: User must be logged in */}
