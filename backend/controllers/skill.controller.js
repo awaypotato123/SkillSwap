@@ -29,6 +29,7 @@ export const createSkill = async (req, res) => {
       category,
       level,
       userId,
+      status: "pending"
     });
 
     const savedSkill = await skill.save();
@@ -92,3 +93,15 @@ export const deleteSkill = async (req, res) => {
     res.status(500).json({ message: "Server error deleting skill" });
   }
 };
+
+//Get skills pending approval
+export const getPendingSkills = async (req, res) => {
+  try {
+    const skills = await Skill.find({ status: "pending" }).populate("userId", "firstName lastName email");
+
+    res.status(200).json(skills)
+  } catch (err) {
+    console.error("Error fetching skills awaiting approval:", err);
+    res.status(500).json({ message: "Server error fetching skills awaiting approval" });
+  }
+}
