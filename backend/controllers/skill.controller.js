@@ -1,6 +1,7 @@
 import Skill from "../models/Skill.js";
 import User from "../models/User.js";
 
+
 export const getAllSkills = async (req, res) => {
     try {
         const {keyword, category} = req.query; 

@@ -20,7 +20,7 @@ export async function register(req, res) {
       lastName: lastName.trim(),
       email: String(email).toLowerCase().trim(),
       password, 
-      role: role || "learner",
+      role: role || "user",
       skills: skills || [],
     });
 

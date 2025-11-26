@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["learner", "teacher", "admin"],
+    enum: ["user", "admin"],
     default: "learner"
   },
   credits: {
@@ -84,7 +84,6 @@ UserSchema.methods = {
       return "";
     }
   },
-
   makeSalt: function() {
     return Math.round(new Date().valueOf() * Math.random()) + "";
   }

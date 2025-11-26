@@ -50,8 +50,8 @@ export default function Navbar() {
               {/* Show Classes and Dashboard only if logged in */}
               {user && (
                 <>
-                  <Link to="/classes" className="text-gray-700 hover:text-blue-600">
-                    Classes
+                  <Link to="/classroom" className="text-gray-700 hover:text-blue-600">
+                    Classroom
                   </Link>
                   <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">
                     Dashboard

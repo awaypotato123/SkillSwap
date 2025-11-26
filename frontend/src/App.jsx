@@ -4,11 +4,16 @@ import Home from './pages/Home';
 import Classes from './pages/Classes';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
-import ClassDetail from './pages/ClassDetail';
 import Browse from './pages/Browse';
 import SkillDetail from './pages/SkillDetail';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
+import EditClass from './components/EditClass';
+import CreateClass from './components/CreateClass';
+import Classroom from './components/Classroom';
+import EnterClass from './components/EnterClass';
+import ManageClass from './components/ManageClass';
+
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
@@ -33,11 +38,15 @@ export default function App() {
             <Route path="/browse" element={<Browse />} />
             <Route path="/skills/:id" element={<SkillDetail />} />
             <Route path="/classes" element={<Classes />} />
-            <Route path="/classes/:id" element={<ClassDetail />} />
             {/* Protected route: User must be logged in */}
             <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             {/* Admin route: Only accessible to users with 'admin' role */}
             <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+            <Route path="/create-class" element={<CreateClass />} />
+            <Route path="/edit-class/:classId" element={<EditClass />} />
+            <Route path="/classroom" element={<Classroom />} />
+            <Route path="/enter-class/:classId" element={<EnterClass />} />
+            <Route path="/manage-class/:classId" element={<ManageClass />} />
           </Routes>
         </div>
       </ToastProvider>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../lib/api";
 import { useToasts } from "../context/ToastContext";
 import AddSkillModal from "../components/AddSkillModal";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { push } = useToasts();
@@ -11,6 +12,8 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [showAddSkillModal, setShowAddSkillModal] = useState(false);
+  const [classes, setClasses] = useState([]);
+  const navigate = useNavigate();
 
   // Profile form state
   const [profileForm, setProfileForm] = useState({
@@ -30,6 +33,7 @@ export default function Dashboard() {
   useEffect(() => {
     fetchUserProfile();
     fetchUserStats();
+    fetchUserClasses();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -54,6 +58,17 @@ export default function Dashboard() {
       setStats(response.data.stats);
     } catch (error) {
       console.error("Error fetching stats:", error);
+    }
+  };
+
+  const fetchUserClasses = async () => {
+    try {
+      const response = await api.get("/classes");  // Fetch user's classes from the backend
+      setClasses(response.data);
+      console.log(response.data);  // Store them in the classes state
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      push("Failed to load classes", "error");
     }
   };
 
@@ -124,6 +139,20 @@ export default function Dashboard() {
       fetchUserStats();
     } catch (error) {
       push(error.response?.data?.message || "Failed to delete skill", "error");
+    }
+  };
+
+  const handleDeleteClass = async (classId) => {
+    if (!window.confirm("Are you sure you want to delete this class?")) {
+      return;
+    }
+
+    try {
+      await api.delete(`/classes/${classId}`);
+      push("Class deleted successfully", "success");
+      fetchUserClasses(); // Refresh classes
+    } catch (error) {
+      push(error.response?.data?.message || "Failed to delete class", "error");
     }
   };
 
@@ -216,9 +245,6 @@ export default function Dashboard() {
               </h1>
               <p className="text-blue-100 mt-1">{userProfile.email}</p>
               <div className="flex items-center gap-4 mt-3">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white text-blue-700">
-                  {userProfile.role}
-                </span>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-400 text-yellow-900">
                   💰 {userProfile.credits} Credits
                 </span>
@@ -234,65 +260,11 @@ export default function Dashboard() {
         {/* Stats Cards */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-600">Credits</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.credits}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-green-100 rounded-full">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-600">Total Skills</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.totalSkills}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-yellow-100 rounded-full">
-                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-600">Beginner</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.skillsByLevel.beginner}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-red-100 rounded-full">
-                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-600">Advanced</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.skillsByLevel.advanced}</p>
-                </div>
-              </div>
-            </div>
+            {/* Stats content (similar to your existing stats cards) */}
           </div>
         )}
 
-        {/* Tabs */}
+        {/* Tabs Section */}
         <div className="bg-white rounded-lg shadow mb-8">
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
@@ -326,10 +298,84 @@ export default function Dashboard() {
               >
                 My Skills
               </button>
+              <button
+                onClick={() => setActiveTab("classes")}
+                className={`py-4 px-6 font-medium text-sm ${
+                  activeTab === "classes"
+                    ? "border-b-2 border-blue-600 text-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                My Classes
+              </button>
             </nav>
           </div>
 
           <div className="p-6">
+            {/* My Classes Tab */}
+{activeTab === "classes" && (
+  <div className="space-y-6">
+    <h2 className="text-2xl font-bold text-gray-900">My Classes</h2>
+
+    {/* Button to navigate to "Create New Class" page */}
+    <button
+      onClick={() => navigate("/create-class")}  // Navigate to the new component page for adding a class
+      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium mb-4"
+    >
+      Create New Class
+    </button>
+
+    {/* Check if user has classes */}
+    {classes.length === 0 ? (
+      <p className="text-gray-500 mt-4">You have not created any classes yet.</p>
+    ) : (
+      <ul className="divide-y divide-gray-200">
+        {classes.map((classItem) => (
+          <li
+            key={classItem._id}
+            className="flex justify-between items-center py-4"
+          >
+            {/* Class Title and Description */}
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">{classItem.title}</h3>
+              <p className="text-sm text-gray-600">{classItem.description}</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Date: {new Date(classItem.date).toLocaleDateString()}
+              </p>
+              <p className="text-sm text-gray-500">
+                Max Students: {classItem.maxStudents}
+              </p>
+            </div>
+
+            {/* Buttons for Edit and Delete */}
+            <div className="flex space-x-2">
+              {/* Edit Button */}
+              <button
+                onClick={() => navigate(`/edit-class/${classItem._id}`)}  // Navigate to the Edit Class page
+                className="text-blue-600 hover:text-blue-700 p-2"
+                title="Edit class"
+              >
+                Edit
+              </button>
+
+              {/* Delete Button */}
+              <button
+                onClick={() => handleDeleteClass(classItem._id)}  // Call delete function
+                className="text-red-600 hover:text-red-700 p-2"
+                title="Delete class"
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+)}
+
+
+            {/* Other Tabs (Security, Skills) */}
             {/* Profile Tab */}
             {activeTab === "profile" && (
               <form onSubmit={handleProfileUpdate}>

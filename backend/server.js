@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.route.js";
 import skillRoutes from "./routes/skill.route.js";
 import userRoutes from "./routes/user.route.js";
+import classRoutes from "./routes/class.route.js";  // Import class routes
 import cors from "cors";
 
 // CRITICAL: Load environment variables FIRST, before anything else
@@ -20,14 +21,17 @@ console.log("===================================");
 connectDB();
 
 const app = express();
-app.use(express.json()); 
+app.use(express.json()); // Middleware to parse JSON bodies
 
-app.use(cors());
+app.use(cors()); // CORS middleware
 
+// Register routes
 app.use("/api/auth", authRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/classes", classRoutes);  // Register class routes here
 
+// Home route
 app.get('/', (req, res) => {
     res.send('API is running...');
 });

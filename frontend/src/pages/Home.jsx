@@ -23,8 +23,12 @@ export default function Home() {
     setShowAuthModal(true);
   };
 
-  const openExploreClasses = () => {
+  const openExploreSkill = () => {
     navigate("/browse");
+  };
+
+    const openExploreClasses = () => {
+    navigate("/classes");
   };
 
   return (
@@ -64,7 +68,7 @@ export default function Home() {
               </div>
             </div>
             <button
-              onClick={handleSearch}
+              onClick={openExploreClasses}
               className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium"
             >
               Search Classes
@@ -79,10 +83,10 @@ export default function Home() {
               Get Started - Sign Up
             </button>
             <button 
-              onClick={openExploreClasses}
+              onClick={openExploreSkill}
               className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-lg font-medium text-lg"
             >
-              Explore Classes
+              Explore Skills
             </button>
           </div>
         </div>
