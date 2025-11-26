@@ -33,7 +33,6 @@ export default function Dashboard() {
   useEffect(() => {
     fetchUserProfile();
     fetchUserStats();
-    fetchUserClasses();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -58,17 +57,6 @@ export default function Dashboard() {
       setStats(response.data.stats);
     } catch (error) {
       console.error("Error fetching stats:", error);
-    }
-  };
-
-  const fetchUserClasses = async () => {
-    try {
-      const response = await api.get("/classes");  // Fetch user's classes from the backend
-      setClasses(response.data);
-      console.log(response.data);  // Store them in the classes state
-    } catch (error) {
-      console.error("Error fetching classes:", error);
-      push("Failed to load classes", "error");
     }
   };
 
@@ -298,84 +286,11 @@ export default function Dashboard() {
               >
                 My Skills
               </button>
-              <button
-                onClick={() => setActiveTab("classes")}
-                className={`py-4 px-6 font-medium text-sm ${
-                  activeTab === "classes"
-                    ? "border-b-2 border-blue-600 text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                My Classes
-              </button>
+              
             </nav>
           </div>
 
           <div className="p-6">
-            {/* My Classes Tab */}
-{activeTab === "classes" && (
-  <div className="space-y-6">
-    <h2 className="text-2xl font-bold text-gray-900">My Classes</h2>
-
-    {/* Button to navigate to "Create New Class" page */}
-    <button
-      onClick={() => navigate("/create-class")}  // Navigate to the new component page for adding a class
-      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium mb-4"
-    >
-      Create New Class
-    </button>
-
-    {/* Check if user has classes */}
-    {classes.length === 0 ? (
-      <p className="text-gray-500 mt-4">You have not created any classes yet.</p>
-    ) : (
-      <ul className="divide-y divide-gray-200">
-        {classes.map((classItem) => (
-          <li
-            key={classItem._id}
-            className="flex justify-between items-center py-4"
-          >
-            {/* Class Title and Description */}
-            <div>
-              <h3 className="text-xl font-semibold text-gray-800">{classItem.title}</h3>
-              <p className="text-sm text-gray-600">{classItem.description}</p>
-              <p className="text-sm text-gray-500 mt-2">
-                Date: {new Date(classItem.date).toLocaleDateString()}
-              </p>
-              <p className="text-sm text-gray-500">
-                Max Students: {classItem.maxStudents}
-              </p>
-            </div>
-
-            {/* Buttons for Edit and Delete */}
-            <div className="flex space-x-2">
-              {/* Edit Button */}
-              <button
-                onClick={() => navigate(`/edit-class/${classItem._id}`)}  // Navigate to the Edit Class page
-                className="text-blue-600 hover:text-blue-700 p-2"
-                title="Edit class"
-              >
-                Edit
-              </button>
-
-              {/* Delete Button */}
-              <button
-                onClick={() => handleDeleteClass(classItem._id)}  // Call delete function
-                className="text-red-600 hover:text-red-700 p-2"
-                title="Delete class"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-)}
-
-
-            {/* Other Tabs (Security, Skills) */}
             {/* Profile Tab */}
             {activeTab === "profile" && (
               <form onSubmit={handleProfileUpdate}>

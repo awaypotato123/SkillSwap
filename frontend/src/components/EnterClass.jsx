@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import StudentPanel from "./StudentPanel";
 import api from "../lib/api";
 
 export default function EnterClass() {
@@ -33,66 +34,95 @@ export default function EnterClass() {
     if (!classData) {
         return (
             <div className="flex items-center justify-center h-screen">
-                <p className="text-gray-600 text-lg">Class not found.</p>
+                <p className="text-gray-600 text-lg">Class not found</p>
             </div>
         );
     }
 
     return (
         <div className="min-h-screen bg-gray-100 py-10 px-6">
-            <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-                {/* Class Title */}
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                    {classData.title}
-                </h1>
+                {/* LEFT SIDE */}
+                <div className="space-y-8">
 
-                {/* Instructor */}
-                <p className="text-gray-700 text-lg mb-1">
-                    <span className="font-medium">Instructor:</span> {classData.userName}
-                </p>
+                    {/* Header and stats */}
+                    <div className="bg-white shadow rounded-xl p-8">
+                        <h1 className="text-3xl font-bold text-gray-900">
+                           Class Name: {classData.title}
+                        </h1>
 
-                {/* Date */}
-                <p className="text-gray-700 text-lg mb-1">
-                    <span className="font-medium">Date:</span>{" "}
-                    {new Date(classData.date).toLocaleDateString()}
-                </p>
+                        <p className="text-gray-600 mt-1 text-2xl">
+                            By: {classData.userName}
+                        </p>
 
-                {/* Max Students */}
-                <p className="text-gray-700 text-lg mb-4">
-                    <span className="font-medium">Max Students:</span>{" "}
-                    {classData.maxStudents}
-                </p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
 
-                {/* Description */}
-                <div className="mt-4 border-t pt-4">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                        Description
-                    </h2>
-                    <p className="text-gray-700 leading-relaxed">
-                        {classData.description}
-                    </p>
+                            {/* Date */}
+                            <div className="p-5 bg-blue-100 rounded-xl shadow-sm">
+                                <p className="text-sm text-gray-600">Date</p>
+                                <p className="text-2xl font-semibold text-blue-700 mt-1">
+                                    {new Date(classData.date).toLocaleDateString()}
+                                </p>
+                            </div>
+
+                            {/* Capacity */}
+                            <div className="p-5 bg-green-100 rounded-xl shadow-sm">
+                                <p className="text-sm text-gray-600">Student Limit</p>
+                                <p className="text-2xl font-semibold text-green-700 mt-1">
+                                    {classData.maxStudents}
+                                </p>
+                            </div>
+
+                            {/* Joined */}
+                            <div className="p-5 bg-yellow-100 rounded-xl shadow-sm">
+                                <p className="text-sm text-gray-600">Students Joined</p>
+                                <p className="text-2xl font-semibold text-yellow-700 mt-1">
+                                    {classData.students?.length || 0}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="bg-white shadow rounded-xl p-8">
+                        <h2 className="text-xl font-bold text-gray-900 mb-3">About This Class</h2>
+                        <p className="text-gray-700 leading-relaxed">
+                            {classData.description}
+                        </p>
+                    </div>
+
+                    {/* Skill */}
+                    <div className="bg-white shadow rounded-xl p-8">
+                        <h2 className="text-xl font-bold text-gray-900 mb-3">Skill Focus</h2>
+                        <p className="text-gray-700">
+                            {classData.skill?.title}
+                        </p>
+                    </div>
+
                 </div>
 
-                {/* Skill */}
-                <div className="mt-6 border-t pt-4">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                        Skill Taught
-                    </h2>
-                    <p className="text-gray-700">
-                        {classData.skill?.title}
-                    </p>
+                {/* RIGHT SIDE */}
+                <div className="space-y-8">
+                    <div className="space-y-8">
+  <StudentPanel classId={classId} />
+</div>
+                    <div className="bg-white shadow-lg rounded-xl p-8 min-h-[400px]">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                            Student Tools
+                        </h2>
+                        <p className="text-gray-500">
+                            This area will hold class resources, attendance, discussion, and more.
+                        </p>
+
+                        <div className="mt-6 h-64 bg-gray-100 border border-gray-300 rounded-lg flex items-center justify-center">
+                            <p className="text-gray-400">Coming Soon</p>
+                        </div>
+                    </div>
+
                 </div>
 
-                {/* Number of students */}
-                <div className="mt-6 border-t pt-4">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                        Students Joined
-                    </h2>
-                    <p className="text-gray-700">
-                        {classData.students?.length || 0}
-                    </p>
-                </div>
             </div>
         </div>
     );

@@ -123,3 +123,22 @@ export const getUserStats = async (req, res) => {
     res.status(500).json({ message: "Server error fetching stats" });
   }
 };
+
+export const getPublicUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await User.findById(userId)
+      .select("firstName lastName email bio profilePicture credits createdAt")
+      .populate("skills", "title category level");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.error("Public user fetch error", error);
+    return res.status(500).json({ message: "Server error fetching public user" });
+  }
+};

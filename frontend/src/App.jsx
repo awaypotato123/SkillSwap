@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import Classes from './pages/Classes';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
-import Browse from './pages/Browse';
+// import Browse from './pages/Browse';
 import SkillDetail from './pages/SkillDetail';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
@@ -13,7 +13,8 @@ import CreateClass from './components/CreateClass';
 import Classroom from './components/Classroom';
 import EnterClass from './components/EnterClass';
 import ManageClass from './components/ManageClass';
-
+import PublicProfile from './components/ViewProfile';
+import BrowseUnified from './pages/BrowseUnified';
 
 function PrivateRoute({ children }) {
   const { user } = useAuth();
@@ -35,7 +36,7 @@ export default function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/browse" element={<Browse />} />
+<Route path="/browse" element={<BrowseUnified />} />
             <Route path="/skills/:id" element={<SkillDetail />} />
             <Route path="/classes" element={<Classes />} />
             {/* Protected route: User must be logged in */}
@@ -47,6 +48,7 @@ export default function App() {
             <Route path="/classroom" element={<Classroom />} />
             <Route path="/enter-class/:classId" element={<EnterClass />} />
             <Route path="/manage-class/:classId" element={<ManageClass />} />
+            <Route path="/profile/:userId" element={<PublicProfile />} />
           </Routes>
         </div>
       </ToastProvider>

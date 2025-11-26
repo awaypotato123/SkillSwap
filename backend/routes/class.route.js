@@ -20,7 +20,7 @@ router.post('/create', protect, createClass);
 router.get('/', getClasses);
 
 //GET: Get all classes the user has created
-router.get('/instructor', protect, getClasses);
+router.get('/', protect, getClasses);
 
 // GET: Get a single class by classId (authentication required)
 router.get('/:classId', protect, getClassById); 

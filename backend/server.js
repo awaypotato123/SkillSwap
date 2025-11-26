@@ -4,7 +4,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.route.js";
 import skillRoutes from "./routes/skill.route.js";
 import userRoutes from "./routes/user.route.js";
-import classRoutes from "./routes/class.route.js";  // Import class routes
+import classRoutes from "./routes/class.route.js";
+import classPostsRoutes from "./routes/classpost.route.js";
 import cors from "cors";
 
 // CRITICAL: Load environment variables FIRST, before anything else
@@ -29,7 +30,8 @@ app.use(cors()); // CORS middleware
 app.use("/api/auth", authRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/classes", classRoutes);  // Register class routes here
+app.use("/api/classes", classRoutes);
+app.use("/api/classposts", classPostsRoutes);
 
 // Home route
 app.get('/', (req, res) => {
