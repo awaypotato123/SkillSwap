@@ -21,7 +21,6 @@ const classSchema = new mongoose.Schema({
     },
     userName: {
         type: String, 
-        required: true 
     },
     date: { 
         type: Date, 

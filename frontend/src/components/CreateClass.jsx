@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../lib/api";
 import { useToasts } from "../context/ToastContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateClass() {
   const { push } = useToasts();
@@ -10,6 +11,7 @@ export default function CreateClass() {
   const [maxStudents, setMaxStudents] = useState(0);
   const [classDate, setClassDate] = useState("2025-12-01T10:00:00Z"); // Hardcoded class date for now
   const [userProfile, setUserProfile] = useState(null); // State to store user profile
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserProfile();
@@ -40,6 +42,7 @@ export default function CreateClass() {
     try {
       const response = await api.post("/classes/create", newClass);
       push("Class created successfully!", "success");
+      navigate("/classroom");
     } catch (error) {
       console.error("Error creating class:", error);
       push("Failed to create class", "error");

@@ -1,15 +1,36 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext"; // Assuming you have a custom Auth context
+import { useAuth } from "../context/AuthContext"; 
+import api from '../lib/api'
+import { Link } from "react-router-dom";
+
 
 export default function ClassCard({ classData }) {
-  const { title, description, skill, userName, maxStudents, rating } = classData;
-  const { user } = useAuth(); // Check if the user is logged in
+  const { title, description, skill, user, userName, maxStudents, rating } = classData;
+  const { userr } = useAuth(); // Check if the user is logged in
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Function to open the modal
   const openModal = () => {
     setIsModalOpen(true);
   };
+
+const joinClass = async () => {
+  try {
+    const res = await api.post(`/classes/join/${classData._id}`);
+
+    console.log("Join response:", res.data);
+
+    // You can replace this with your toast if you want
+    alert("Joined class successfully");
+
+    closeModal();
+  } catch (error) {
+    console.error("Error joining class:", error);
+    alert("Could not join this class");
+  }
+};
+
+
 
   // Function to close the modal
   const closeModal = () => {
@@ -23,9 +44,12 @@ export default function ClassCard({ classData }) {
       
       {/* Class Skill */}
       <p className="text-sm text-gray-500 mt-1">Skill: {skill.title}</p>
-
-      <p className="text-sm text-gray-600 mt-2">Instructor: {userName}</p>
-
+<Link
+  to={`/profile/${classData.user}`}
+  className="text-sm text-blue-600 mt-2 cursor-pointer hover:underline"
+>
+  Instructor: {userName}
+</Link>
       {/* Class Description */}
       <p className="text-sm text-gray-600 mt-2">{description}</p>
       
@@ -54,7 +78,10 @@ export default function ClassCard({ classData }) {
             {/* Class Details in Modal */}
             <h3 className="text-2xl font-semibold text-gray-900 mb-4">{title}</h3>
             <p className="text-lg text-gray-500 mt-1">Skill: {skill.title}</p>
-            <p className="text-lg text-gray-600 mt-2">Instructor: {userName}</p>
+            <p className="text-lg text-gray-600 mt-2 underline">Instructor:<Link
+  to={`/profile/${classData.user}`}
+> {userName}
+</Link></p>
             <p className="text-lg text-gray-600 mt-4">{description}</p>
             <div className="mt-4 flex justify-between items-center">
               <span className="text-blue-600 font-medium">
@@ -65,9 +92,9 @@ export default function ClassCard({ classData }) {
 
             {/* Join Class Button or Sign In Prompt */}
             <div className="mt-6 flex justify-end space-x-4">
-              {user ? (
+              {userr ? (
                 <button
-                  onClick={closeModal} // Ideally, this would join the class via an API
+                  onClick={joinClass}// Ideally, this would join the class via an API
                   className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium"
                 >
                   Join Class

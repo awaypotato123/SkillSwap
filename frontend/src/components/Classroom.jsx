@@ -122,9 +122,18 @@ export default function Classroom() {
               Student Portal
             </h2>
 
-            <p className="text-lg text-gray-600 mt-4">
-              My Classes (Student View)
-            </p>
+<div className="flex justify-between items-center mt-4">
+  <p className="text-lg text-gray-600">
+    My Classes
+  </p>
+
+  <button
+    onClick={() => navigate("/classes")}
+    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium"
+  >
+    Join a Class
+  </button>
+</div>
 
             {loading && (
               <div className="text-center animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto my-4"></div>
@@ -167,10 +176,18 @@ export default function Classroom() {
               Instructor Portal
             </h2>
 
-            <p className="text-lg text-gray-600 mt-4">
-              My Classes (Instructor View)
-            </p>
+    <div className="flex justify-between items-center mt-4">
+      <p className="text-lg text-gray-600">
+        My Classes
+      </p>
 
+      <button
+        onClick={() => navigate("/create-class")}
+        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Create New Class
+      </button>
+    </div>
             {loading && (
               <div className="text-center animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto my-4"></div>
             )}
