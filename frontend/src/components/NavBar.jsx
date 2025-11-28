@@ -12,7 +12,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   const openSignInModal = () => {
-    setIsSignUpMode(false); // Set to false for Sign In mode
+    setIsSignUpMode(false); 
     setShowAuth(true);
   };
 
@@ -37,7 +37,7 @@ export default function Navbar() {
               ☰
             </button>
 
-            {/* Navigation Links */}
+            
             <div
               className={`${
                 open ? "flex" : "hidden"
@@ -47,7 +47,7 @@ export default function Navbar() {
                 Home
               </Link>
 
-              {/* Show Classes and Dashboard only if logged in */}
+              
               {user && (
                 <>
                   <Link to="/classroom" className="text-gray-700 hover:text-blue-600">
@@ -56,10 +56,17 @@ export default function Navbar() {
                   <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">
                     Dashboard
                   </Link>
+                  
+                  {/* Show Admin link only for admin users */}
+                  {user.role === "admin" && (
+                    <Link to="/admin" className="text-gray-700 hover:text-blue-600 font-semibold">
+                      Admin
+                    </Link>
+                  )}
                 </>
               )}
 
-              {/* Right-side buttons */}
+              
               {!user ? (
                 <button
                   onClick={openSignInModal}
@@ -82,7 +89,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Auth Modal */}
+      
       <AuthModal
         isOpen={showAuth}
         onClose={() => setShowAuth(false)}
@@ -91,7 +98,6 @@ export default function Navbar() {
         setIsSignInSuccessPopup={setIsSignInSuccessPopup}
       />
 
-      {/* Success Pop-up Message for Sign Up */}
       {isSignUpSuccessPopup && (
         <div className="fixed top-5 right-5 z-50 bg-green-100 border border-green-400 rounded-lg text-green-700 p-4 shadow-md transition-transform transform duration-300 ease-in-out">
           <div className="flex items-center">
