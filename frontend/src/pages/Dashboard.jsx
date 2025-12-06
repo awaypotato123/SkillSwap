@@ -234,7 +234,7 @@ export default function Dashboard() {
               <p className="text-blue-100 mt-1">{userProfile.email}</p>
               <div className="flex items-center gap-4 mt-3">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-400 text-yellow-900">
-                  💰 {userProfile.credits} Credits
+                  💰 {userProfile.credits} Credits {console.log(userProfile.credits)}
                 </span>
               </div>
             </div>

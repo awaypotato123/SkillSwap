@@ -179,3 +179,31 @@ export const updateUserCreds = async (req, res) => {
   }
 };
 
+export const updateCreditsById = async (req, res) => {
+  try {
+    const { userId, credits } = req.body;
+
+    if (!userId || credits === undefined || isNaN(credits)) {
+      return res.status(400).json({ message: "Invalid input" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $inc: { credits } },       // increment by the amount
+      { new: true }
+    ).select("credits");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "Instructor credits updated successfully",
+      credits: updatedUser.credits
+    });
+
+  } catch (error) {
+    console.error("Instructor credit update error:", error);
+    res.status(500).json({ message: "Server error updating instructor credits" });
+  }
+};

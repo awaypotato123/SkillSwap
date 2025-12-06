@@ -1,38 +1,41 @@
 import { createContext, useContext, useState } from "react";
-import Cookies from "js-cookie";  
-import { login, register } from "../lib/api"; 
+import { login, register } from "../lib/api";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const userCookie = Cookies.get("user");
-    return userCookie ? JSON.parse(userCookie) : null;
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
   });
 
   const loginUser = async (email, password) => {
     const response = await login(email, password);
-    console.log(response)
-  const userData = response.user;
-  
-  setUser(userData);
-  console.log(userData); 
-    Cookies.set("user", JSON.stringify(response.user), { expires: 1, secure: true, sameSite: "Strict" });
+
+    const userData = response.user;
+    setUser(userData);
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", response.token);
   };
 
   const registerUser = async (firstName, lastName, email, password) => {
     const response = await register(firstName, lastName, email, password);
-    setUser(response.user); 
-    Cookies.set("user", JSON.stringify(response.user), { expires: 1, secure: true, sameSite: "Strict" });
+
+    const userData = response.user;
+    setUser(userData);
+
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
-    setUser(null);  
-    Cookies.remove("user"); 
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, loginUser, registerUser, logout }}>
+    <AuthContext.Provider value={{ user, loginUser, setUser,  registerUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -5,7 +5,8 @@ import {
   updatePassword,
   getUserStats,
     getPublicUser,
-    updateUserCreds
+    updateUserCreds,
+    updateCreditsById
 } from "../controllers/user.controller.js";
 import { protect } from "../middleware/auth.middleware.js";
 
@@ -18,5 +19,7 @@ router.put("/password", protect, updatePassword);
 router.get("/stats", protect, getUserStats);
 router.get("/public/:id", getPublicUser);
 router.put("/update-credits", protect, updateUserCreds);
+router.put("/update-credits-by-id", protect, updateCreditsById);
+
 
 export default router;

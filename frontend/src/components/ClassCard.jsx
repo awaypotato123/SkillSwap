@@ -10,31 +10,44 @@ export default function ClassCard({ classData }) {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
 const joinClass = async () => {
   if (!user) return alert("You must be signed in to join a class.");
   if (user.credits < 1) return alert("Not enough credits to join this class.");
 
   try {
-    // 1️⃣ Join the class
-    const joinRes = await api.post(`/classes/join/${classData._id}`);
-    console.log("Join response:", joinRes.data);
+    await api.post(`/classes/join/${classData._id}`);
 
-    // 2️⃣ Deduct 1 credit from the student
     const newStudentCredits = user.credits - 1;
-    const studentCreditRes = await api.put("/users/update-credits", { credits: newStudentCredits });
-    setUser({ ...user, credits: studentCreditRes.data.credits });
 
-    // 3️⃣ Add 1 credit to the class owner
-    await api.put("/users/update-credits", { userId: classData.user, creditsChange: 1 });
+    const studentRes = await api.put("/users/update-credits", {
+      credits: newStudentCredits
+    });
 
-    alert(`Joined class successfully! 1 credit deducted from you and 1 credit added to the instructor.`);
+    if (studentRes?.data?.credits !== undefined) {
+      setUser({
+        ...user,
+        credits: studentRes.data.credits
+      });
+    }
+
+    // Increment instructor credits
+    if (classData.user !== user._id) {
+      await api.put("/users/update-credits-by-id", {
+        userId: classData.user,
+        credits: 1    // this will increment once backend is updated
+      });
+    }
+
+    alert("Joined class successfully. Credits updated.");
     closeModal();
-  } catch (error) {
-    console.error("Error joining class or updating credits:", error);
-    alert(error.response?.data?.message || "Could not join this class");
+
+  } catch (err) {
+    console.error("Join error:", err);
+    alert(err.response?.data?.message || "Could not join this class");
   }
 };
+
+
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md p-4 flex flex-col">
